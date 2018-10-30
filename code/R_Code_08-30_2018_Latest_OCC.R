@@ -13,6 +13,7 @@ library(dplyr)
 library(ggthemes)
 library(scales)
 library(itsadug)
+library(visreg)
 ############################
 ##### Data Preparation #####
 ############################
@@ -220,13 +221,28 @@ mopt4 = gam(kwh ~ s(temperature, by=occ) + s(hours2, bs="cc", k=40) +
              Econ*optimalstart*month*solar + s(prev_week, by=day), 
            data = energy[1:(nrow(energy)-336),])
 summary(mopt4)
-plot.gam(mopt4)
+#plot.gam(mopt4)
+
+occ_vals <- as.data.frame(predict(mopt4, type = "terms", se=TRUE))
+
+
+#######Confidence intervals for "hours2" smooth:
+
+preds   <- predict(mopt4, type = "terms", se.fit = TRUE)
+my_data <- data.frame(mu   = occ_vals$fit.s.hours2.,
+                      low  = occ_vals$fit.s.hours2. - 1.96 * occ_vals$se.fit.s.hours2.,
+                      high = occ_vals$fit.s.hours2. + 1.96 * occ_vals$se.fit.s.hours2.)
+
+week_data <- my_data[c(73:168, 1:72),]
+plot(week_data$mu, type="l", col="red", lwd=2, main="Time of Day v/s Occupancy profile - Thursday to Wednesday",
+     xlab="Time of day (24 hours each day)", ylab="Occupancy Profile")
+lines(week_data$low, type="l", col="blue", lty=2, lwd=2)
+lines(week_data$high, type="l", col="blue", lty=2, lwd=2)
+
+write.csv(week_data, file="Occ values with Confidence Intervals.csv")
 
 
 
-
-
-occ_vals <- as.data.frame(predict(mopt4, type = "terms"))
 write.csv(occ_vals, file="OCC_VALUES_overall.csv")
 
 
@@ -244,3 +260,4 @@ plot.gam(mopt4, col = "red",
 
 
 
+#options(repos="https://CRAN.R-project.org")
