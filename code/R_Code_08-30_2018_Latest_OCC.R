@@ -191,53 +191,56 @@ ggplot(data = energy, aes(x = temperature, y=kwh,color=occ)) + geom_point()+
 ##### Fit Models:  HOURLY #####
 #####################################
 
-mopt = gam(kwh ~ s(temperature, by=occ) + s(hours, by=day) + 
+mopt1 = gam(kwh ~ s(temperature, by=occ) + s(hours, by=day) + 
              Econ*optimalstart*solar+ s(prev_week, by=occ) + s(prev_2week, by=occ)+
              s(temp_4delay, by=occ)+ s(temp_6delay, by=occ), 
            data = energy[1:(nrow(energy)-336),])
-summary(mopt)
-#plot.gam(mopt)
+summary(mopt1)
+#plot.gam(mopt1)
 
 
-mopt = gam(kwh ~ s(temperature, by=occ) + s(hours, by=day) + 
+mopt2 = gam(kwh ~ s(temperature, by=occ) + s(hours, by=day) + 
              Econ*optimalstart*month*solar + s(prev_week, by=day)+
              + s(prev_day, by=occ), 
            data = energy[1:(nrow(energy)-336),])
-summary(mopt)
-#plot.gam(mopt)
+summary(mopt2)
+#plot.gam(mopt2)
 
 ###########################******************
 
-mopt = gam(kwh ~ s(temperature, by=occ) + s(hours2, k=13, bs="cc") + 
+mopt3 = gam(kwh ~ s(temperature, by=occ) + s(hours2, k=13, bs="cc") + 
              Econ*optimalstart*solar+ s(prev_week, by=occ) + s(prev_2week, by=occ)+
              s(temp_4delay, by=occ)+ s(temp_6delay, by=occ), 
            data = energy[1:(nrow(energy)-336),])
-summary(mopt)
-#plot.gam(mopt)
+summary(mopt3)
+#plot.gam(mopt3)
 
 
-mopt = gam(kwh ~ s(temperature, by=occ) + s(hours2, bs="cc", k=40) + 
+mopt4 = gam(kwh ~ s(temperature, by=occ) + s(hours2, bs="cc", k=40) + 
              Econ*optimalstart*month*solar + s(prev_week, by=day), 
            data = energy[1:(nrow(energy)-336),])
-summary(mopt)
-plot.gam(mopt)
+summary(mopt4)
+plot.gam(mopt4)
 
 
 
 
 
-occ_vals <- as.data.frame(predict(mopt, type = "terms"))
+occ_vals <- as.data.frame(predict(mopt4, type = "terms"))
 write.csv(occ_vals, file="OCC_VALUES_overall.csv")
 
 
 
 # Variable plots for Simple model  ----------------------------------------------------------
 grid(nx = NULL, ny = NULL, col = "lightgray", lty = "dotted")
-plot.gam(mopt, col = "red",
+plot.gam(mopt4, col = "red",
          shade = TRUE, shade.col="rosybrown1", lwd=3,
          panel.abline=grid(),select=3, main = "Effect of Time of Day on Energy Consumption \n Weekly",
          xlab="Time of the day (24 hours each from Sunday to Saturday)",
          ylab = "Smooth Function of Time of Day",
          font.lab=2, rug = FALSE,cex.axis=1,cex.main=1.6,cex.lab=1.4)
+
+
+
 
 
