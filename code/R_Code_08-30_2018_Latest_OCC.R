@@ -204,7 +204,7 @@ mopt = gam(kwh ~ s(temperature, by=occ) + s(hours, by=day) +
              + s(prev_day, by=occ), 
            data = energy[1:(nrow(energy)-336),])
 summary(mopt)
-plot.gam(mopt)
+#plot.gam(mopt)
 
 ###########################******************
 
@@ -213,21 +213,20 @@ mopt = gam(kwh ~ s(temperature, by=occ) + s(hours2, k=13, bs="cc") +
              s(temp_4delay, by=occ)+ s(temp_6delay, by=occ), 
            data = energy[1:(nrow(energy)-336),])
 summary(mopt)
-plot.gam(mopt)
+#plot.gam(mopt)
 
 
-mopt = gam(kwh ~ s(temperature, by=occ) + s(hours2, bs="cc", k=45) + 
+mopt = gam(kwh ~ s(temperature, by=occ) + s(hours2, bs="cc", k=40) + 
              Econ*optimalstart*month*solar + s(prev_week, by=day), 
            data = energy[1:(nrow(energy)-336),])
 summary(mopt)
 plot.gam(mopt)
 
-str(energy)
+
 
 
 
 occ_vals <- as.data.frame(predict(mopt, type = "terms"))
-
 write.csv(occ_vals, file="OCC_VALUES_overall.csv")
 
 
@@ -236,60 +235,9 @@ write.csv(occ_vals, file="OCC_VALUES_overall.csv")
 grid(nx = NULL, ny = NULL, col = "lightgray", lty = "dotted")
 plot.gam(mopt, col = "red",
          shade = TRUE, shade.col="rosybrown1", lwd=3,
-         panel.abline=grid(),select=3, main = "Effect of Time of Day on Energy Consumption \n Friday",
-         xlab="Time of the day",
-         ylab = "Smooth Function of Time of Day on Friday",
+         panel.abline=grid(),select=3, main = "Effect of Time of Day on Energy Consumption \n Weekly",
+         xlab="Time of the day (24 hours each from Sunday to Saturday)",
+         ylab = "Smooth Function of Time of Day",
          font.lab=2, rug = FALSE,cex.axis=1,cex.main=1.6,cex.lab=1.4)
-
-grid(nx = NULL, ny = NULL, col = "lightgray", lty = "dotted")
-plot.gam(mopt, col = "red",
-         shade = TRUE, shade.col="rosybrown1", lwd=3,
-         panel.abline=grid(),select=4, main = "Effect of Time of Day on Energy Consumption \n Monday",
-         xlab="Time of the day",
-         ylab = "Smooth Function of Time of Day on Monday",
-         font.lab=2, rug = FALSE,cex.axis=1,cex.main=1.6,cex.lab=1.4)
-
-grid(nx = NULL, ny = NULL, col = "lightgray", lty = "dotted")
-plot.gam(mopt, col = "red",
-         shade = TRUE, shade.col="rosybrown1", lwd=3,
-         panel.abline=grid(),select=5, main = "Effect of Time of Day on Energy Consumption \n Saturday",
-         xlab="Time of the day",
-         ylab = "Smooth Function of Time of Day on Saturday",
-         font.lab=2, rug = FALSE,cex.axis=1,cex.main=1.6,cex.lab=1.4)
-
-grid(nx = NULL, ny = NULL, col = "lightgray", lty = "dotted")
-plot.gam(mopt, col = "red",
-         shade = TRUE, shade.col="rosybrown1", lwd=3,
-         panel.abline=grid(),select=6, main = "Effect of Time of Day on Energy Consumption \n Sunday",
-         xlab="Time of the day",
-         ylab = "Smooth Function of Time of Day on Sunday",
-         font.lab=2, rug = FALSE,cex.axis=1,cex.main=1.6,cex.lab=1.4)
-
-
-grid(nx = NULL, ny = NULL, col = "lightgray", lty = "dotted")
-plot.gam(mopt, col = "red",
-         shade = TRUE, shade.col="rosybrown1", lwd=3,
-         panel.abline=grid(),select=7, main = "Effect of Time of Day on Energy Consumption \n Thursday",
-         xlab="Time of the day",
-         ylab = "Smooth Function of Time of Day on Thursday",
-         font.lab=2, rug = FALSE,cex.axis=1,cex.main=1.6,cex.lab=1.4)
-
-grid(nx = NULL, ny = NULL, col = "lightgray", lty = "dotted")
-plot.gam(mopt, col = "red",
-         shade = TRUE, shade.col="rosybrown1", lwd=3,
-         panel.abline=grid(),select=8, main = "Effect of Time of Day on Energy Consumption \n Tuesday",
-         xlab="Time of the day",
-         ylab = "Smooth Function of Time of Day on Tuesday",
-         font.lab=2, rug = FALSE,cex.axis=1,cex.main=1.6,cex.lab=1.4)
-
-
-grid(nx = NULL, ny = NULL, col = "lightgray", lty = "dotted")
-plot.gam(mopt, col = "red",
-         shade = TRUE, shade.col="rosybrown1", lwd=3,
-         panel.abline=grid(),select=9, main = "Effect of Time of Day on Energy Consumption \n Wednesday",
-         xlab="Time of the day",
-         ylab = "Smooth Function of Time of Day on Wednesday",
-         font.lab=2, rug = FALSE,cex.axis=1,cex.main=1.6,cex.lab=1.4)
-
 
 
